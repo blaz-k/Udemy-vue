@@ -18,8 +18,10 @@
 </template>
 
 <script>
-import { ref, reactive, watch, toRefs, computed, onMounted } from "vue";
+import { ref, reactive, toRefs, onMounted } from "vue";
 import AppAlert from "@/components/Alert.vue";
+import { useNumber } from "./hooks/number";
+import { usePhrase } from "./hooks/phrase";
 
 export default {
   name: "App",
@@ -35,34 +37,18 @@ export default {
       });
     });
 
-    let num = ref(0);
-
-    function increment() {
-      num.value++;
-    }
-
-    const double = computed(() => {
-      return num.value * 2;
-    });
-
     const user = reactive({
       name: "John",
       age: 20,
     });
 
-    const phrase = ref("");
-    const reversePhrase = ref("");
-
-    watch(() => {
-      reversePhrase.value = phrase.value
-        .split("")
-        .reverse()
-        .join("");
-    });
-
     setTimeout(() => {
       user.name = "Luis";
     }, 3000);
+
+    const { num, increment, double } = useNumber();
+
+    const { phrase, reversePhrase, num: phraseNum } = usePhrase();
 
     return {
       num,
@@ -73,6 +59,7 @@ export default {
       double,
       user,
       btn,
+      phraseNum,
     };
   },
 };
